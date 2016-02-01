@@ -8,7 +8,7 @@ using namespace std;
 
 const auto Blank = "\r                                        \r";
 
-size_t OnWrite(void* data, size_t size, size_t count, void* userData)
+static size_t OnWrite(void* data, size_t size, size_t count, void* userData)
 {
     auto stream = (ostream*)userData;
     size_t total = size * count;
@@ -16,7 +16,7 @@ size_t OnWrite(void* data, size_t size, size_t count, void* userData)
     return total;
 }
 
-int OnProgress(
+static int OnProgress(
     void* /*userData*/,
     double totalToDownload,
     double downloaded,
@@ -33,7 +33,10 @@ int OnProgress(
     return 0;
 }
 
-bool Download(const char* uri, ostream& stream, bool showProgress = false)
+static bool Download(
+    const char* uri,
+    ostream& stream,
+    bool showProgress = false)
 {
     auto c = curl_easy_init();
     curl_easy_setopt(c, CURLOPT_WRITEFUNCTION, OnWrite);
